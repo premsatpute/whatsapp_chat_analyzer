@@ -1,3 +1,4 @@
-# whatsapp_chat_analyzer
-download this repo and have fun with the analysis of group chats 
+# whatsapp-chat-analysis
 A streamlit app to analyze your whatsapp chats
+
+Demo Link: https://wca-campusx.herokuapp.com/
