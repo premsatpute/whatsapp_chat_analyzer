@@ -33,22 +33,24 @@ def fetch_stats(selected_user,df):
 
     return num_messages, len(words), num_media_messages, len(links)
 
-def top_5_active (df):
-
+def top_5_active(df):
+    # Filter out group notifications
     chat_grp_ntf_rmvd = df[df['users'] != 'group notification']
 
-
+    # Count messages by user and take the top 10
     y = chat_grp_ntf_rmvd['users'].value_counts().head(10)
-    top_10_active = pd.DataFrame(y).rename(columns={'users': 'messages'})
+    top_10_active = pd.DataFrame({'users': y.index, 'messages': y.values})
 
-     # adding pct column
+    # Debugging: Print the DataFrame to check its structure
+    print("Top 10 active DataFrame:")
+    print(top_10_active)
 
-    # data frame for percentage of messages by each user
-
-    k = chat_grp_ntf_rmvd['users'].value_counts().sum()  # sum of all legit msges from 87 unique users .
+    # Calculate the sum of messages for percentage contribution
+    k = chat_grp_ntf_rmvd['users'].value_counts().sum()
     top_10_active['pct_contribution'] = round((top_10_active['messages'] / k) * 100, 2)
 
     return top_10_active
+
 
 def top_inactive (df):
 
