@@ -52,22 +52,28 @@ def top_5_active(df):
     return top_10_active
 
 
-def top_inactive (df):
 
+
+def top_inactive(df):
+    # Filter out group notifications
     chat_grp_ntf_rmvd = df[df['users'] != 'group notification']
 
-
+    # Count messages per user, get top 10 inactive users
     y = chat_grp_ntf_rmvd['users'].value_counts(ascending=True).head(10)
     top_inactive = pd.DataFrame(y).rename(columns={'users': 'messages'})
 
-     # adding pct column
+    # Calculate sum of all messages from legitimate users
+    k = chat_grp_ntf_rmvd['users'].value_counts().sum()
 
-    # data frame for percentage of messages by each user
+    # Create a DataFrame to hold results
+    result_df = pd.DataFrame()
+    result_df['messages'] = y  # Copy messages count to result_df
 
-    k = chat_grp_ntf_rmvd['users'].value_counts(ascending=True).sum()  # sum of all legit msges from 87 unique users .
-    top_inactive['pct_contribution'] = round((top_inactive['messages'] / k) * 100, 2)
+    # Calculate percentage contribution
+    result_df['pct_contribution'] = round((result_df['messages'] / k) * 100, 2)
 
-    return top_inactive
+    return result_df
+
 
 def create_wordcloud(selected_user,df):
 
