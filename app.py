@@ -54,23 +54,23 @@ if uploaded_file is not None:
 
 # top active users
 
-        if selected_user=="Overall":
+        if selected_user == "Overall":
             st.divider()
             st.markdown('<h1 style="color: #FF6347;">Top 5 Active Users</h1>', unsafe_allow_html=True)
 
-            col1, col2 = st.columns(2)
-            top_active= helper.top_5_active(df)
+        col1, col2 = st.columns(2)
+        top_active = helper.top_5_active(df)
 
-            with col1:
+        with col1:
+            fig, ax = plt.subplots(figsize=(10, 7))
+            sns.barplot(x=top_active['users'][:5], y=top_active['pct_contribution'][:5], hue=top_active['messages'][:5], palette='viridis')
+            ax.set_xlabel('Users')
+            ax.set_ylabel('Percentage Contribution')
+            ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
+            st.pyplot(fig)
 
-                fig, ax = plt.subplots(figsize=(10, 7))
-                sns.barplot(x=top_active.index[:5], y=top_active.pct_contribution[:5], hue=top_active.messages[:5],palette='viridis')
-                ax.set_xlabel('Users')
-                ax.set_ylabel('Percentage Contribution')
-                ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
-                st.pyplot(fig)
-            with col2:
-                st.dataframe(top_active)
+        with col2:
+            st.dataframe(top_active)
 
             st.divider()
             st.markdown('<h1 style="color: #FF6347;">Most deleted messages </h1>', unsafe_allow_html=True)
@@ -78,13 +78,13 @@ if uploaded_file is not None:
             col1,col2=st.columns(2)
             user_max_del=helper.most_deleted_msges(df)
 
-            with col1:
-                fig,ax=plt.subplots()
-                sns.barplot(x=user_max_del.index, y=user_max_del.pct_deleted, hue=user_max_del.msg_deleted,palette='viridis')
-                plt.xticks(rotation=45)
-                st.pyplot(fig)
-            with col2:
-                st.dataframe(user_max_del)
+         with col1:
+             fig,ax=plt.subplots()
+             sns.barplot(x=user_max_del.index, y=user_max_del.pct_deleted, hue=user_max_del.msg_deleted,palette='viridis')
+             plt.xticks(rotation=45)
+             st.pyplot(fig)
+         with col2:
+             st.dataframe(user_max_del)
 
 
 
