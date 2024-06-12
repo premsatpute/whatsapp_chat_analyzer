@@ -177,4 +177,5 @@ if uploaded_file is not None:
             fig, ax = plt.subplots(figsize=(3, 4))
             ax = sns.heatmap(user_heatmap)
             st.pyplot(fig)
+        st.sidebar.button("Coming soon: Chat Sentiment Analysis ")
 
