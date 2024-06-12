@@ -154,17 +154,24 @@ def activity_heatmap(selected_user,df):
     return user_heatmap
 
 def most_deleted_msges(chat):
-    # users who deleted maximum msges :
+    # users who deleted maximum messages
     user_max_del = chat[chat['messages'] == 'This message was deleted']['users'].value_counts()
     user_max_del = pd.DataFrame(user_max_del)
-
-    user_max_del = user_max_del.iloc[:5]
-
-    # % pct deleted out of total msges deleted. total 60 users have deleted msges taking top 5
-
-
+    
+    # Rename the 'users' column to 'msg_deleted'
     user_max_del.rename(columns={'users': 'msg_deleted'}, inplace=True)
+    
+    # Get the top 5 users who deleted messages
+    user_max_del = user_max_del.iloc[:5]
+    
+    # Add a new column for the total messages sent by these users
     user_max_del['total_msges_sent'] = chat[chat['users'].isin(user_max_del.index)]['users'].value_counts()
+    
+    # Fill any missing values with 0
+    user_max_del = user_max_del.fillna(0)
+    
+    # Calculate the percentage of messages deleted out of the total messages sent by these users
     user_max_del['pct_deleted'] = round((user_max_del['msg_deleted'] / user_max_del['total_msges_sent']) * 100, 2)
+    
+    return user_max_del
 
-    return  user_max_del
