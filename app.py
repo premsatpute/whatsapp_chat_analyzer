@@ -79,7 +79,7 @@ if uploaded_file is not None:
 
             with col1:
                 fig, ax = plt.subplots()
-                sns.barplot(x=user_max_del.index, y=user_max_del.pct_deleted, hue=user_max_del.msg_deleted, palette='viridis')
+                sns.barplot(x=user_max_del.index, y=user_max_del['pct_deleted'], hue=user_max_del['msg_deleted'], palette='viridis')
                 plt.xticks(rotation=45)
                 st.pyplot(fig)
             with col2:
@@ -94,7 +94,7 @@ if uploaded_file is not None:
 
             with col1:
                 fig, ax = plt.subplots(figsize=(10, 7))
-                sns.barplot(x=top_inactive.index[:5], y=top_inactive.pct_contribution[:5], hue=top_inactive.messages[:5], palette='viridis')
+                sns.barplot(x=top_inactive.index[:5], y=top_inactive['pct_contribution'][:5], hue=top_inactive['messages'][:5], palette='viridis')
                 ax.set_xlabel('Users')
                 ax.set_ylabel('Percentage Contribution')
                 ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
