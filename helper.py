@@ -154,24 +154,35 @@ def activity_heatmap(selected_user,df):
     return user_heatmap
 
 def most_deleted_msges(chat):
-    # users who deleted maximum messages
-    user_max_del = chat[chat['messages'] == 'This message was deleted']['users'].value_counts()
-    user_max_del = pd.DataFrame(user_max_del)
+    # Filter for deleted messages
+    deleted_msgs = chat[chat['messages'] == 'This message was deleted']
     
-    # Rename the 'users' column to 'msg_deleted'
-    user_max_del.rename(columns={'users': 'msg_deleted'}, inplace=True)
+    # Count the number of deleted messages per user and name the Series
+    user_max_del = deleted_msgs['users'].value_counts().rename('msg_deleted')
+    st.write("Deleted message counts per user:", user_max_del)
+    
+    # Convert to DataFrame
+    user_max_del = user_max_del.to_frame()
+    st.write("DataFrame after renaming column:", user_max_del)
     
     # Get the top 5 users who deleted messages
     user_max_del = user_max_del.iloc[:5]
+    st.write("Top 5 users who deleted messages:", user_max_del)
     
-    # Add a new column for the total messages sent by these users
-    user_max_del['total_msges_sent'] = chat[chat['users'].isin(user_max_del.index)]['users'].value_counts()
+    # Calculate the total messages sent by these users
+    total_msgs_sent = chat[chat['users'].isin(user_max_del.index)]['users'].value_counts()
+    total_msgs_sent = total_msgs_sent.rename('total_msges_sent')
+    st.write("Total messages sent by top 5 users:", total_msgs_sent)
+    
+    # Merge the total messages sent with the user_max_del DataFrame
+    user_max_del = user_max_del.join(total_msgs_sent)
+    st.write("DataFrame after adding total messages sent:", user_max_del)
     
     # Fill any missing values with 0
-    user_max_del = user_max_del.fillna(0)
+    user_max_del.fillna(0, inplace=True)
     
-    # Calculate the percentage of messages deleted out of the total messages sent by these users
+    # Calculate the percentage of messages deleted out of the total messages sent
     user_max_del['pct_deleted'] = round((user_max_del['msg_deleted'] / user_max_del['total_msges_sent']) * 100, 2)
+    st.write("Final DataFrame with percentage of messages deleted:", user_max_del)
     
     return user_max_del
-
