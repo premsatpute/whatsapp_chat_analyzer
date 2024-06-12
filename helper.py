@@ -2,7 +2,7 @@ from urlextract import URLExtract
 from wordcloud import WordCloud
 import pandas as pd
 from collections import Counter
-import emoji
+
 import seaborn as sns
 import  matplotlib as plt
 import streamlit as st
@@ -101,17 +101,7 @@ def create_wordcloud(selected_user,df):
 
     return df_wc, most_common_df
 
-def emoji_helper(selected_user,df):
-    if selected_user != 'Overall':
-        df = df[df['users'] == selected_user]
 
-    emojis = []
-    for message in df['messages']:
-        emojis.extend([c for c in message if c in emoji.EMOJI_DATA])
-
-    emoji_df = pd.DataFrame(Counter(emojis).most_common(len(Counter(emojis))))
-
-    return emoji_df
 
 def monthly_timeline(selected_user,df):
 
